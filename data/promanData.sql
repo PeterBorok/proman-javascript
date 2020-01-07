@@ -35,11 +35,13 @@ CREATE TABLE statuses
 );
 
 
-ALTER TABLE ONLY cards
-    ADD CONSTRAINT fk_board_id FOREIGN KEY (board_id) REFERENCES boards (id);
+alter table cards
+	add constraint fk_status_id
+		foreign key (status_id) references statuses (id);
 
--- ALTER TABLE ONLY cards
---     ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) REFERENCES statuses (id);
+alter table cards
+	add constraint fk_board_id
+		foreign key (board_id) references boards (id);
 
 
 INSERT INTO boards
@@ -47,14 +49,6 @@ VALUES (1, 'Board 1');
 INSERT INTO boards
 VALUES (2, 'Board 2');
 SELECT pg_catalog.setval('boards_id_seq', 2, true);
-
-INSERT INTO cards
-VALUES (1, 1, 'new card 1', 0, 0);
-INSERT INTO cards
-VALUES (2, 2, 'new card 2', 0, 1);
-INSERT INTO cards
-VALUES (3, 1, 'in progress card', 1, 0);
-SELECT pg_catalog.setval('cards_id_seq', 3, true);
 
 INSERT INTO statuses
 VALUES (0, 'new');
@@ -64,4 +58,13 @@ INSERT INTO statuses
 VALUES (2, 'testing');
 INSERT INTO statuses
 VALUES (3, 'done');
+
+INSERT INTO cards
+VALUES (1, 1, 'new card 1', 0, 0);
+INSERT INTO cards
+VALUES (2, 2, 'new card 2', 0, 1);
+INSERT INTO cards
+VALUES (3, 1, 'in progress card', 1, 0);
+SELECT pg_catalog.setval('cards_id_seq', 3, true);
+
 
