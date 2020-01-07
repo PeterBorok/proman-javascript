@@ -2,6 +2,7 @@ import connection
 from psycopg2 import sql
 import bcrypt
 
+
 @connection.connection_handler
 def get_boards(cursor):
     cursor.execute("""
@@ -10,29 +11,35 @@ def get_boards(cursor):
     boards = cursor.fetchall()
     return boards
 
-    # """
-    # Find the first status matching the given id
-    # :param status_id:
-    # :return: str
-    # """
-    # statuses = persistence.get_statuses()
-    # return next((status['title'] for status in statuses if status['id'] == str(status_id)), 'Unknown')
+
+@connection.connection_handler
+def get_cards(cursor, board_id):
+    cursor.execute("""
+                    SELECT * FROM cards
+                    WHERE board_id=$(board_id)s;
+    """,
+                   {"board_id": board_id})
+    cards = cursor.fetchall()
+    return cards
 
 
-# def get_boards():
-#     """
-#     Gather all boards
-#     :return:
-#     """
-#     return persistence.get_boards(force=True)
-#
-#
-# def get_cards_for_board(board_id):
-#     persistence.clear_cache()
-#     all_cards = persistence.get_cards()
-#     matching_cards = []
-#     for card in all_cards:
-#         if card['board_id'] == str(board_id):
-#             card['status_id'] = get_card_status(card['status_id'])  # Set textual status for the card
-#             matching_cards.append(card)
-#     return matching_cards
+@connection.connection_handler
+def get_one_card(cursor, card_id):
+    cursor.execute("""
+                SELECT * FROM cards
+                WHERE id=$(card_id)s;
+    """,
+                   {"card_id": card_id})
+    card = cursor.fetchone()
+    return card
+
+
+@connection.connection_handler
+def change_status(cursor, card_id, status_id):
+    cursor.execute("""
+                UPDATE cards
+                SET status_id=$(status_id)s
+                WHERE id=$(card_id)s;
+    """,
+                   {"card_id": card_id, "status_id": status_id})
+
