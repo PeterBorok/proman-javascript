@@ -24,7 +24,7 @@ CREATE TABLE cards
     board_id  int                NOT NULL,
     title     text,
     status_id int                NOT NULL,
-    orderd    int
+    orderd   int
 );
 
 
