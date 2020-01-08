@@ -20,6 +20,7 @@ export let dom = {
         for (let board of boards) {
             let section = document.createElement('section');
             section.setAttribute('class', 'board');
+            section.dataset.boardIdSet = `${board.id}`;
             let boardHeader = document.createElement('div');
             boardHeader.setAttribute('class', 'board-header');
             let spanHeader = document.createElement('span');
@@ -48,13 +49,10 @@ export let dom = {
         });
     },
 
-    showStatuses: function (statuses, boards) {
-        let boardsContainer = document.querySelector('.board-container');
-
-        for (let board of boards) {
-            let section = document.createElement('section');
-            section.setAttribute('class', 'board');
-            for (let status of statuses) {
+    showStatuses: function (boardId) {
+        let section = document.querySelectorAll("section");
+        for (let board of section) {
+            if (board.dataset.boardIdSet == boardId) {
                 let boardColumns = document.createElement('div');
                 boardColumns.setAttribute('class', 'board-columns');
                 let boardColumn = document.createElement('div');
@@ -68,9 +66,8 @@ export let dom = {
                 boardColumn.appendChild(spanHeader);
                 boardColumn.appendChild(boardColumnContent);
                 boardColumns.appendChild(boardColumn);
-                section.appendChild(boardColumns);
-                boardsContainer.appendChild(section);
 
+                section.appendChild(boardColumns);
             }
         }
     },
