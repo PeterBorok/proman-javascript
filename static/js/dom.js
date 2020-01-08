@@ -86,9 +86,9 @@ export let dom = {
         // it adds necessary event listeners also
         let boardsContainer = document.querySelector('.board-container');
 
-        for (board of boards) {
+        for (let board of boards) {
             for (let status of statuses) {
-                for (item of cards) {
+                for (let item of cards) {
 
                     let card = document.createElement('div');
                     card.setAttribute('class', 'card');
@@ -98,9 +98,14 @@ export let dom = {
                     trash.setAttribute('class', "fas fa-trash-alt");
                     let cardTitle = document.createElement('div');
                     cardTitle.setAttribute('class', 'card-title');
-                    cardTitle.innerHTML = `${item.title};
+                    cardTitle.innerHTML = `${item.title}`;
+
+                    card.appendChild(cardRemove);
+                    card.appendChild(trash);
+                    card.appendChild(cardTitle);
                 }
             }
         }
-    // here comes more features
-},
+        // here comes more features
+    },
+};
