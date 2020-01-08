@@ -44,12 +44,12 @@ export let dom = {
     },
 
     loadStatuses: function () {
-        dataHandler.getStatuses(function (boardId, statuses) {
-            dom.showStatuses(boardId, statuses)
+        dataHandler.getStatuses(function (statuses) {
+            dom.showStatuses(statuses)
         });
     },
 
-    showStatuses: function (boardId, statuses) {
+    showStatuses: function (statuses, boardId) {
         let section = document.querySelectorAll("section");
         for (let board of section) {
             if (board.dataset.boardIdSet == boardId) {
