@@ -44,30 +44,32 @@ export let dom = {
     },
 
     loadStatuses: function () {
-        dataHandler.getStatuses(function (statuses) {
-            dom.showStatuses(statuses)
+        dataHandler.getStatuses(function (boardId, statuses) {
+            dom.showStatuses(boardId, statuses)
         });
     },
 
-    showStatuses: function (boardId) {
+    showStatuses: function (boardId, statuses) {
         let section = document.querySelectorAll("section");
         for (let board of section) {
             if (board.dataset.boardIdSet == boardId) {
-                let boardColumns = document.createElement('div');
-                boardColumns.setAttribute('class', 'board-columns');
-                let boardColumn = document.createElement('div');
-                boardColumn.setAttribute('class', 'board-column');
-                let spanHeader = document.createElement('span');
-                spanHeader.innerHTML = `${status.title}`;
-                spanHeader.setAttribute('class', 'board-title');
-                let boardColumnContent = document.createElement('div');
-                boardColumnContent.setAttribute('class', 'board-column-content');
+                for(let status of statuses) {
+                    let boardColumns = document.createElement('div');
+                    boardColumns.setAttribute('class', 'board-columns');
+                    let boardColumn = document.createElement('div');
+                    boardColumn.setAttribute('class', 'board-column');
+                    let spanHeader = document.createElement('span');
+                    spanHeader.innerHTML = `${status.title}`;
+                    spanHeader.setAttribute('class', 'board-title');
+                    let boardColumnContent = document.createElement('div');
+                    boardColumnContent.setAttribute('class', 'board-column-content');
 
-                boardColumn.appendChild(spanHeader);
-                boardColumn.appendChild(boardColumnContent);
-                boardColumns.appendChild(boardColumn);
+                    boardColumn.appendChild(spanHeader);
+                    boardColumn.appendChild(boardColumnContent);
+                    boardColumns.appendChild(boardColumn);
 
-                section.appendChild(boardColumns);
+                    section.appendChild(boardColumns);
+                }
             }
         }
     },
