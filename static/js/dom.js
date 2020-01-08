@@ -40,19 +40,17 @@ export let dom = {
             boardHeader.appendChild(toggleButton);
             section.appendChild(boardHeader);
             boardsContainer.appendChild(section);
+            dom.loadStatuses(board.id);
         }
     },
 
-    loadStatuses: function () {
-        dataHandler.getStatuses(function (statuses) {
-            dom.showStatuses(statuses)
+    loadStatuses: function (boardId) {
+        dataHandler.getStatuses(boardId, function (statuses) {
+            dom.showStatuses(statuses, boardId)
         });
     },
 
     showStatuses: function (statuses, boardId) {
-        let section = document.querySelectorAll("section");
-        for (let board of section) {
-            if (board.dataset.boardIdSet == boardId) {
                 for(let status of statuses) {
                     let boardColumns = document.createElement('div');
                     boardColumns.setAttribute('class', 'board-columns');
@@ -68,10 +66,11 @@ export let dom = {
                     boardColumn.appendChild(boardColumnContent);
                     boardColumns.appendChild(boardColumn);
 
-                    section.appendChild(boardColumns);
+                    // section.appendChild(boardColumns);
+                    dom.loadCards()
                 }
-            }
-        }
+
+
     },
 
     loadCards: function () {
