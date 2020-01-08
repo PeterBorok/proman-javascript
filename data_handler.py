@@ -62,3 +62,8 @@ def add_new_card(cursor, board_id, card_id, card_title, status_id):
                     VALUES (%(card_id)s, %(board_id)s, %(card_title)s, %(status_id)s) 
     """,
                    {'id': card_id, 'board_id': board_id, 'title': card_title, 'status_id': status_id})
+
+
+@connection.connection_handler
+def get_statuses():
+    pass
