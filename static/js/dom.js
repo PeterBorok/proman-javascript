@@ -78,14 +78,31 @@ export let dom = {
             dom.showCards(cards);
         })
     },
-    showCards: function (cards) {
+    showCards: function (boards, statuses, cards) {
         // shows the cards of a board
         // it adds necessary event listeners also
-        // let boardsContainer = document.querySelector('.board-container');
-        //
-        // for (let card in b)
-        //     let section = document.querySelector('.board');
+        let boardsContainer = document.querySelector('.board-container');
 
+        for (let board of boards) {
+            for (let status of statuses) {
+                for (let item of cards) {
+
+                    let card = document.createElement('div');
+                    card.setAttribute('class', 'card');
+                    let cardRemove = document.createElement('div');
+                    cardRemove.setAttribute('class', 'card-remove');
+                    let trash = document.createElement('i');
+                    trash.setAttribute('class', "fas fa-trash-alt");
+                    let cardTitle = document.createElement('div');
+                    cardTitle.setAttribute('class', 'card-title');
+                    cardTitle.innerHTML = `${item.title}`;
+
+                    card.appendChild(cardRemove);
+                    card.appendChild(trash);
+                    card.appendChild(cardTitle);
+                }
+            }
+        }
+        // here comes more features
     },
-    // here comes more features
 };
