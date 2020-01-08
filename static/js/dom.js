@@ -42,26 +42,28 @@ export let dom = {
             section.appendChild(boardHeader);
             boardsContainer.appendChild(section);
         }
-        //     boardList += `
-        //         <li>${board.title}</li>
-        //     `;
-        // }
-        //
-        // const outerHtml = `
-        //     <ul class="board-container">
-        //         ${boardList}
-        //     </ul>
-        // `;
-
-        // let boardsContainer = document.querySelector('#boards');
-        // boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
     },
-    loadCards: function (boardId) {
+
+    loadStatus: function () {
+        dataHandler.getStatus(function (status) {
+            dom.loadStatus(statuses)
+        })
+    }
+
+    loadCards: function () {
         // retrieves cards and makes showCards called
+        dataHandler.getCardsByBoardId(function (cards) {
+            dom.showCards(cards);
+        })
     },
     showCards: function (cards) {
         // shows the cards of a board
         // it adds necessary event listeners also
+        let boardsContainer = document.querySelector('.board-container');
+
+        for (let card in b)
+        let section = document.querySelector('.board');
+
     },
     // here comes more features
 };
