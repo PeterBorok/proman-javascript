@@ -65,5 +65,9 @@ def add_new_card(cursor, board_id, card_id, card_title, status_id):
 
 
 @connection.connection_handler
-def get_statuses():
-    pass
+def get_statuses(cursor):
+    cursor.execute("""
+                        SELECT title from statuses 
+        """)
+    statuses = cursor.fetchall()
+    return statuses
