@@ -15,22 +15,46 @@ export let dom = {
         // shows boards appending them to #boards div
         // it adds necessary event listeners also
 
-        let boardList = '';
+        let boardsContainer = document.querySelector('.board-container');
 
         for(let board of boards){
-            boardList += `
-                <li>${board.title}</li>
-            `;
+            let section = document.createElement('section');
+            section.setAttribute('class', 'board');
+            let boardHeader = document.createElement('div');
+            boardHeader.setAttribute('class', 'board-header');
+            let boardTitle = document.createElement('board-title');
+            boardTitle.setAttribute('class', 'board-title');
+            let spanHeader = document.createElement('span');
+            spanHeader.innerHTML = `${board.title}`;
+            spanHeader.setAttribute('class', 'board-title');
+            let addButton = document.createElement('button');
+            addButton.setAttribute('class', 'board-add');
+            addButton.innerHTML = 'Add Card';
+            let toggleButton = document.createElement('button');
+            toggleButton.setAttribute('class', 'board-toggle');
+            let iTag = document.createElement('i');
+            iTag.setAttribute('class', 'fas fa-trash-alt');
+
+            toggleButton.appendChild(iTag);
+            boardHeader.appendChild(spanHeader);
+            boardHeader.appendChild(addButton);
+            boardHeader.appendChild(toggleButton);
+            section.appendChild(boardHeader);
+            boardsContainer.appendChild(section);
         }
+        //     boardList += `
+        //         <li>${board.title}</li>
+        //     `;
+        // }
+        //
+        // const outerHtml = `
+        //     <ul class="board-container">
+        //         ${boardList}
+        //     </ul>
+        // `;
 
-        const outerHtml = `
-            <ul class="board-container">
-                ${boardList}
-            </ul>
-        `;
-
-        let boardsContainer = document.querySelector('#boards');
-        boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+        // let boardsContainer = document.querySelector('#boards');
+        // boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
     },
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called

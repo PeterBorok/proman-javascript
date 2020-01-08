@@ -38,7 +38,7 @@ def get_one_card(cursor, card_id):
 def change_status(cursor, card_id, status_id):
     cursor.execute("""
                 UPDATE cards
-                SET status_id=$(status_id)s
+                SET status_id=%(status_id)s
                 WHERE id=%(card_id)s;
     """,
                    {"card_id": card_id, "status_id": status_id})
