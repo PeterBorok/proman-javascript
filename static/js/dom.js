@@ -1,5 +1,5 @@
 // It uses data_handler.js to visualize elements
-import { dataHandler } from "./data_handler.js";
+import {dataHandler} from "./data_handler.js";
 
 export let dom = {
     init: function () {
@@ -7,7 +7,7 @@ export let dom = {
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
-        dataHandler.getBoards(function(boards){
+        dataHandler.getBoards(function (boards) {
             dom.showBoards(boards);
         });
     },
@@ -17,7 +17,7 @@ export let dom = {
 
         let boardsContainer = document.querySelector('.board-container');
 
-        for(let board of boards){
+        for (let board of boards) {
             let section = document.createElement('section');
             section.setAttribute('class', 'board');
             let boardHeader = document.createElement('div');
@@ -46,8 +46,37 @@ export let dom = {
 
     loadStatus: function () {
         dataHandler.getStatus(function (status) {
-            dom.loadStatus(statuses)
+            dom.showStatuses(statuses)
         })
+    }
+
+    showStatuses: function (boards, statuses) {
+        let boardsContainer = document.querySelector('.board-container');
+
+        for (let board of boards) {
+            let boardIfExists = document.querySelector('.board');
+            boardIfExists.setAttribute('class', 'board');
+            for (let status of statuses) {
+                let boardColumns = document.createElement('div');
+                boardColumns.setAttribute('class', 'board-columns');
+                let boardColumn = document.createElement('div');
+                boardColumn.setAttribute('class', 'board-column');
+                let boardColumnTitle = document.createElement('board-column-title');
+                let spanHeader = document.createElement('span');
+                spanHeader.innerHTML = `${status.title}`;
+                spanHeader.setAttribute('class', 'board-title');
+                boardColumnTitle.setAttribute('class', 'board-column-title');
+                let boardColumnContent = document.createElement('div');
+                boardColumnContent.setAttribute('class', 'board-column-content');
+
+                boardColumn.appendChild(boardColumnTitle);
+                boardColumn.appendChild(boardColumnContent);
+                boardColumns.appendChild(boardColumn);
+                boardIfExists.appendChild(boardColumns);
+                boardsContainer.appendChild(boardIfExists);
+
+            }
+        }
     }
 
     loadCards: function () {
@@ -62,7 +91,7 @@ export let dom = {
         let boardsContainer = document.querySelector('.board-container');
 
         for (let card in b)
-        let section = document.querySelector('.board');
+            let section = document.querySelector('.board');
 
     },
     // here comes more features
