@@ -43,3 +43,22 @@ def change_status(cursor, card_id, status_id):
     """,
                    {"card_id": card_id, "status_id": status_id})
 
+
+@connection.connection_handler
+def add_new_board(cursor, board_id, board_title):
+    cursor.execute("""
+                    INSERT INTO boards
+                    (id, title)
+                    VALUES (%(board_id)s, %(board_title)s)
+    """,
+                   {'id': board_id, 'title': board_title})
+
+
+@connection.connection_handler
+def add_new_card(cursor, board_id, card_id, card_title, status_id):
+    cursor.execute("""
+                    INSERT INTO cards
+                    (id, board_id, title, status_id)
+                    VALUES (%(card_id)s, %(board_id)s, %(card_title)s, %(status_id)s) 
+    """,
+                   {'id': card_id, 'board_id': board_id, 'title': card_title, 'status_id': status_id})
