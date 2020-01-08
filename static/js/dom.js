@@ -22,8 +22,6 @@ export let dom = {
             section.setAttribute('class', 'board');
             let boardHeader = document.createElement('div');
             boardHeader.setAttribute('class', 'board-header');
-            let boardTitle = document.createElement('board-title');
-            boardTitle.setAttribute('class', 'board-title');
             let spanHeader = document.createElement('span');
             spanHeader.innerHTML = `${board.title}`;
             spanHeader.setAttribute('class', 'board-title');
@@ -44,40 +42,38 @@ export let dom = {
         }
     },
 
-    loadStatus: function () {
-        dataHandler.getStatus(function (status) {
+    loadStatuses: function () {
+        dataHandler.getStatuses(function (statuses) {
             dom.showStatuses(statuses)
-        })
-    }
+        });
+    },
 
-    showStatuses: function (boards, statuses) {
+    showStatuses: function (statuses, boards) {
         let boardsContainer = document.querySelector('.board-container');
 
         for (let board of boards) {
-            let boardIfExists = document.querySelector('.board');
-            boardIfExists.setAttribute('class', 'board');
+            let section = document.createElement('section');
+            section.setAttribute('class', 'board');
             for (let status of statuses) {
                 let boardColumns = document.createElement('div');
                 boardColumns.setAttribute('class', 'board-columns');
                 let boardColumn = document.createElement('div');
                 boardColumn.setAttribute('class', 'board-column');
-                let boardColumnTitle = document.createElement('board-column-title');
                 let spanHeader = document.createElement('span');
                 spanHeader.innerHTML = `${status.title}`;
                 spanHeader.setAttribute('class', 'board-title');
-                boardColumnTitle.setAttribute('class', 'board-column-title');
                 let boardColumnContent = document.createElement('div');
                 boardColumnContent.setAttribute('class', 'board-column-content');
 
-                boardColumn.appendChild(boardColumnTitle);
+                boardColumn.appendChild(spanHeader);
                 boardColumn.appendChild(boardColumnContent);
                 boardColumns.appendChild(boardColumn);
-                boardIfExists.appendChild(boardColumns);
-                boardsContainer.appendChild(boardIfExists);
+                section.appendChild(boardColumns);
+                boardsContainer.appendChild(section);
 
             }
         }
-    }
+    },
 
     loadCards: function () {
         // retrieves cards and makes showCards called
@@ -88,10 +84,10 @@ export let dom = {
     showCards: function (cards) {
         // shows the cards of a board
         // it adds necessary event listeners also
-        let boardsContainer = document.querySelector('.board-container');
-
-        for (let card in b)
-            let section = document.querySelector('.board');
+        // let boardsContainer = document.querySelector('.board-container');
+        //
+        // for (let card in b)
+        //     let section = document.querySelector('.board');
 
     },
     // here comes more features

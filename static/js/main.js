@@ -9,6 +9,8 @@ function init() {
 
     dom.loadCards();
 
+    dom.loadStatuses();
+
 }
 
 init();
