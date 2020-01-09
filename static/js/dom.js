@@ -56,41 +56,38 @@ export let dom = {
 
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
-
-
     },
 
-    loadCards: function () {
+    loadCards: function (boardId) {
         // retrieves cards and makes showCards called
-        dataHandler.getCardsByBoardId(function (cards) {
-            dom.showCards(cards);
+        dataHandler.getCardsByBoardId(boardId, function (cards) {
+            dom.showCards(boardId, cards);
         })
     },
-    showCards: function (boards, statuses, cards) {
+    showCards: function (boardId, cards) {
         // shows the cards of a board
         // it adds necessary event listeners also
-        let boardsContainer = document.querySelector('.board-container');
+        let numOfBoardColumns = document.querySelectorAll('.board-column');
 
-        for (let board of boards) {
-            for (let status of statuses) {
-                for (let item of cards) {
+        for (let i = 1; i <= numOfBoardColumns.length; i++) {
+            for (let item of cards) {
+                let card = document.createElement('div');
+                card.setAttribute('class', 'card');
+                let cardRemove = document.createElement('div');
+                cardRemove.setAttribute('class', 'card-remove');
+                let trash = document.createElement('i');
+                trash.setAttribute('class', "fas fa-trash-alt");
+                let cardTitle = document.createElement('div');
+                cardTitle.setAttribute('class', 'card-title');
+                cardTitle.innerHTML = `${item.title}`;
 
-                    let card = document.createElement('div');
-                    card.setAttribute('class', 'card');
-                    let cardRemove = document.createElement('div');
-                    cardRemove.setAttribute('class', 'card-remove');
-                    let trash = document.createElement('i');
-                    trash.setAttribute('class', "fas fa-trash-alt");
-                    let cardTitle = document.createElement('div');
-                    cardTitle.setAttribute('class', 'card-title');
-                    cardTitle.innerHTML = `${item.title}`;
-
-                    card.appendChild(cardRemove);
-                    card.appendChild(trash);
-                    card.appendChild(cardTitle);
-                }
+                card.appendChild(cardRemove);
+                cardRemove.appendChild(trash);
+                card.appendChild(cardTitle);
             }
         }
-        // here comes more features
+        let boardColumns = document.querySelector('.board-column');
+        boardColumns.appendChild(card);
+
     },
 };
