@@ -4,6 +4,7 @@ import {dataHandler} from "./data_handler.js";
 export let dom = {
     init: function () {
         // This function should run once, when the page is loaded.
+        dom.loadedPage()
     },
 
     loadBoards: function () {
@@ -36,8 +37,11 @@ export let dom = {
             <ul class="board-container">
                 ${boardList}
             </ul>`;
-
-        let boardsContainer = document.querySelector('#boards');
+        let boardAll = document.createElement('div');
+        boardAll.setAttribute('class', 'board-tables');
+        let x = document.getElementsByTagName('body');
+        x[0].appendChild(boardAll);
+        let boardsContainer = document.querySelector('.board-tables');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
     },
     loadStatuses: function (boardId) {
@@ -100,4 +104,12 @@ export let dom = {
             )
         }
     },
+
+    loadedPage: function () {
+        window.addEventListener('load', function () {
+            let loading = document.querySelector('#boards');
+            loading.classList.toggle('hidden');
+        })
+
+    }
 };
