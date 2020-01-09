@@ -18,7 +18,7 @@ def get_cards(cursor, board_id, status_id):
                     SELECT * FROM cards
                     WHERE board_id=%(board_id)s AND status_id=%(status_id)s;
     """,
-                   {"board_id": board_id, "status_id" : status_id})
+                   {"board_id": board_id, "status_id": status_id})
     cards = cursor.fetchall()
     return cards
 
@@ -45,17 +45,29 @@ def change_status(cursor, card_id, status_id):
 
 
 @connection.connection_handler
-def add_new_board(cursor, board_id, board_title):
-    cursor.execute("""
-                    INSERT INTO boards
-                    (id, title)
-                    VALUES (%(board_id)s, %(board_title)s)
-    """,
-                   {'id': board_id, 'title': board_title})
+def create_new_board(cursor, board_id, board_title):
+    # cursor.execute("""
+    #                 INSERT INTO boards
+    #                 (id, title)
+    #                 VALUES (%(board_id)s, %(board_title)s)
+    # """,
+    #                {'id': board_id, 'title': board_title})
+    cursor.execute('''
+                        SELECT MAX(id) from boards
+                        ''')
+    seq = cursor.fetchone()
+    seq = seq['max'] + 1
+
+    cursor.execute('''
+                        INSERT INTO boards (board_title) VALUES ('Board' + %(seq)s)
+                        ''',
+                   {'seq': seq})
+
+    return seq
 
 
 @connection.connection_handler
-def add_new_card(cursor, board_id, card_id, card_title, status_id):
+def create_new_card(cursor, board_id, card_id, card_title, status_id):
     cursor.execute("""
                     INSERT INTO cards
                     (id, board_id, title, status_id)

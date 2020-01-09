@@ -4,7 +4,8 @@ import {dataHandler} from "./data_handler.js";
 export let dom = {
     init: function () {
         // This function should run once, when the page is loaded.
-        dom.loadedPage()
+        dom.loadedPage();
+        dom.createBoard();
     },
 
     loadBoards: function () {
@@ -12,6 +13,7 @@ export let dom = {
         dataHandler.getBoards(function (boards) {
             dom.showBoards(boards);
             dom.toggleButtons();
+            dom.createNewCard();
         });
     },
 
@@ -44,6 +46,19 @@ export let dom = {
         let boardsContainer = document.querySelector('.board-tables');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
     },
+
+    createBoard: function () {
+        let addNewBoard = document.querySelector("#create-board");
+        addNewBoard.addEventListener("click", function (e) {
+            if (e.detail === 1) {
+                dataHandler.createNewBoard(function (data) {
+                    dom.loadBoards()
+                })
+            }
+        })
+
+    },
+
     loadStatuses: function (boardId) {
         dataHandler.getStatuses(function (statuses) {
             dom.showStatuses(statuses, boardId);
@@ -110,6 +125,17 @@ export let dom = {
             let loading = document.querySelector('#boards');
             loading.classList.toggle('hidden');
         })
+    },
 
+    createNewCard: function () {
+        let addNewCardButtons = document.querySelectorAll('.board-add');
+        for (let addNewCardButton of addNewCardButtons) {
+            addNewCardButton.addEventListener('click', function () {
+                const boardId = addNewCardButton.nextElementSibling.dataset.number;
+                dataHandler.createNewCard(boardId, () => {
+                    this.loadBoards();
+                });
+            })
+        }
     }
 };
