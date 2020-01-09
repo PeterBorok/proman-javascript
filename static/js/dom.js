@@ -27,27 +27,9 @@ export let dom = {
                     <button class="board-add">Add Card</button>
                     <button class="board-toggle" data-number="${board.id}"><i class="fas fa-chevron-down"></i></button>
                 </div>
-                <div class="board-columns" data-number="${board.id}">
-                    <div class="board-column">
-                        <div class="board-column-title">New</div>
-                        <div class="board-column-content column-0${board.id}" ></div>
-                    </div>
-                    <div class="board-column">
-                        <div class="board-column-title">In Progress</div>
-                        <div class="board-column-content column-1${board.id} "></div>
-                    </div>
-                    <div class="board-column">
-                        <div class="board-column-title">Testing</div>
-                        <div class="board-column-content column-2${board.id} "></div>
-                    </div>
-                    <div class="board-column">
-                        <div class="board-column-title">Done</div>
-                        <div class="board-column-content column-3${board.id} "></div>
-                    </div>
-                </div>
             </section>`;
 
-            dom.loadCards(board.id);
+            dom.loadStatuses();
         }
         const outerHtml = `
             <ul class="board-container">
@@ -57,37 +39,63 @@ export let dom = {
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
     },
-
-    loadCards: function (boardId) {
-        // retrieves cards and makes showCards called
-        dataHandler.getCardsByBoardId(boardId, function (cards) {
-            dom.showCards(boardId, cards);
-        })
+    loadStatuses: function () {
+        dataHandler.getStatuses(function (statuses) {
+            dom.showStatuses(statuses);
+        });
     },
-    showCards: function (boardId, cards) {
-        // shows the cards of a board
-        // it adds necessary event listeners also
-        let numOfBoardColumns = document.querySelectorAll('.board-column');
 
-        for (let i = 1; i <= numOfBoardColumns.length; i++) {
-            for (let item of cards) {
-                let card = document.createElement('div');
-                card.setAttribute('class', 'card');
-                let cardRemove = document.createElement('div');
-                cardRemove.setAttribute('class', 'card-remove');
-                let trash = document.createElement('i');
-                trash.setAttribute('class', "fas fa-trash-alt");
-                let cardTitle = document.createElement('div');
-                cardTitle.setAttribute('class', 'card-title');
-                cardTitle.innerHTML = `${item.title}`;
+    showStatuses: function (statuses) {
+        let htmlStatusesString = '';
 
-                card.appendChild(cardRemove);
-                cardRemove.appendChild(trash);
-                card.appendChild(cardTitle);
-            }
+        for (let status of statuses) {
+            htmlStatusesString = `<div class="board-columns" >` +
+                `<div class="board-column-${status.id}">${status.title}</div>` +
+                `</div>`;
+            console.log(htmlStatusesString);
+            let element = document.createElement('div');
+            element.insertAdjacentHTML('beforeend', htmlStatusesString);
+            const selectBoard = document.querySelector(".board");
+            selectBoard.appendChild(element);
+
+            // consdt column = document.querySelector(`.board-column-${status.id}`);
+            // column.appendChild(element);
+            // console.log(column);
         }
-        let boardColumns = document.querySelector('.board-column');
-        boardColumns.appendChild(card);
 
-    },
+    }
+    // loadCards: function (boardId) {
+    //     // retrieves cards and makes showCards called
+    //     dataHandler.getCardsByBoardId(boardId, function (cards) {
+    //         dom.showCards(boardId, cards);
+    //     })
+    // },
+    // showCards: function (boardId, cards) {
+    //     // shows the cards of a board
+    //     // it adds necessary event listeners also
+    //     let numOfBoardColumns = document.querySelectorAll('.board-column');
+    //     let cardList = "";
+    //
+    //     for (let i = 1; i <= numOfBoardColumns.length; i++) {
+    //         for (let item of cards) {
+    //             if (item.status_id == `${i}`) {
+    //                 let card = document.createElement('div');
+    //                 card.setAttribute('class', 'card');
+    //                 let cardRemove = document.createElement('div');
+    //                 cardRemove.setAttribute('class', 'card-remove');
+    //                 let trash = document.createElement('i');
+    //                 trash.setAttribute('class', "fas fa-trash-alt");
+    //                 let cardTitle = document.createElement('div');
+    //                 cardTitle.setAttribute('class', 'card-title');
+    //                 cardTitle.innerHTML = `${item.title}`;
+    //
+    //                 card.appendChild(cardRemove);
+    //                 cardRemove.appendChild(trash);
+    //                 card.appendChild(cardTitle);
+    //                 cardList += card;
+    //                 document.querySelector(`.board-column-container-${item.status_id}${item.board_id}`).appendChild(cardList)
+    //             }
+    //         }
+    //     }
+    // }
 };
