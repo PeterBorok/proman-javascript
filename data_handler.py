@@ -64,7 +64,6 @@ def create_new_board(cursor):
                    {'seq': seq})
 
 
-
 @connection.connection_handler
 def create_new_card(cursor, board_id, card_id, card_title, status_id):
     cursor.execute("""
