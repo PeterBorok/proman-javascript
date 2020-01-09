@@ -5,70 +5,57 @@ export let dom = {
     init: function () {
         // This function should run once, when the page is loaded.
     },
+
     loadBoards: function () {
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function (boards) {
             dom.showBoards(boards);
         });
     },
+
     showBoards: function (boards) {
         // shows boards appending them to #boards div
         // it adds necessary event listeners also
 
-        let boardsContainer = document.querySelector('.board-container');
+        let boardList = '';
 
         for (let board of boards) {
-            let section = document.createElement('section');
-            section.setAttribute('class', 'board');
-            section.dataset.boardIdSet = `${board.id}`;
-            let boardHeader = document.createElement('div');
-            boardHeader.setAttribute('class', 'board-header');
-            let spanHeader = document.createElement('span');
-            spanHeader.innerHTML = `${board.title}`;
-            spanHeader.setAttribute('class', 'board-title');
-            let addButton = document.createElement('button');
-            addButton.setAttribute('class', 'board-add');
-            addButton.innerHTML = 'Add Card';
-            let toggleButton = document.createElement('button');
-            toggleButton.setAttribute('class', 'board-toggle');
-            let iTag = document.createElement('i');
-            iTag.setAttribute('class', 'fas fa-trash-alt');
 
-            toggleButton.appendChild(iTag);
-            boardHeader.appendChild(spanHeader);
-            boardHeader.appendChild(addButton);
-            boardHeader.appendChild(toggleButton);
-            section.appendChild(boardHeader);
-            boardsContainer.appendChild(section);
-            dom.loadStatuses(board.id);
+            boardList += `
+            <section class="board">
+                <div class="board-header"><span class="board-title">${board.title}</span>
+                    <button class="board-add">Add Card</button>
+                    <button class="board-toggle" data-number="${board.id}"><i class="fas fa-chevron-down"></i></button>
+                </div>
+                <div class="board-columns" data-number="${board.id}">
+                    <div class="board-column">
+                        <div class="board-column-title">New</div>
+                        <div class="board-column-content column-0${board.id}" ></div>
+                    </div>
+                    <div class="board-column">
+                        <div class="board-column-title">In Progress</div>
+                        <div class="board-column-content column-1${board.id} "></div>
+                    </div>
+                    <div class="board-column">
+                        <div class="board-column-title">Testing</div>
+                        <div class="board-column-content column-2${board.id} "></div>
+                    </div>
+                    <div class="board-column">
+                        <div class="board-column-title">Done</div>
+                        <div class="board-column-content column-3${board.id} "></div>
+                    </div>
+                </div>
+            </section>`;
+
+            dom.loadCards(board.id);
         }
-    },
+        const outerHtml = `
+            <ul class="board-container">
+                ${boardList}
+            </ul>`;
 
-    loadStatuses: function (boardId) {
-        dataHandler.getStatuses(boardId, function (statuses) {
-            dom.showStatuses(statuses, boardId)
-        });
-    },
-
-    showStatuses: function (statuses, boardId) {
-                for(let status of statuses) {
-                    let boardColumns = document.createElement('div');
-                    boardColumns.setAttribute('class', 'board-columns');
-                    let boardColumn = document.createElement('div');
-                    boardColumn.setAttribute('class', 'board-column');
-                    let spanHeader = document.createElement('span');
-                    spanHeader.innerHTML = `${status.title}`;
-                    spanHeader.setAttribute('class', 'board-title');
-                    let boardColumnContent = document.createElement('div');
-                    boardColumnContent.setAttribute('class', 'board-column-content');
-
-                    boardColumn.appendChild(spanHeader);
-                    boardColumn.appendChild(boardColumnContent);
-                    boardColumns.appendChild(boardColumn);
-
-                    // section.appendChild(boardColumns);
-                    dom.loadCards()
-                }
+        let boardsContainer = document.querySelector('#boards');
+        boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
 
 
     },
