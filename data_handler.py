@@ -13,12 +13,12 @@ def get_boards(cursor):
 
 
 @connection.connection_handler
-def get_cards(cursor, board_id):
+def get_cards(cursor, board_id, status_id):
     cursor.execute("""
                     SELECT * FROM cards
-                    WHERE board_id=%(board_id)s;
+                    WHERE board_id=%(board_id)s AND status_id=%(status_id)s;
     """,
-                   {"board_id": board_id})
+                   {"board_id": board_id, "status_id" : status_id})
     cards = cursor.fetchall()
     return cards
 

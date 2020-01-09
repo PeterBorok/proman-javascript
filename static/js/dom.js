@@ -53,48 +53,41 @@ export let dom = {
         section.appendChild(boardColumns);
 
         for (let status of statuses) {
-            htmlStatusesString = `<div class="board-column">` +
+            htmlStatusesString = `<div class="board-column board-column-${status.id}-${boardId}">` +
                 `<div class="board-column-${status.id} board-column-title">${status.title}</div>` +
-                `</div></div>`;
+                `</div>`;
             console.log(htmlStatusesString);
             let element = document.createElement('div');
             element.insertAdjacentHTML('beforeend', htmlStatusesString);
             boardColumns.insertAdjacentHTML('beforeend', htmlStatusesString);
+            dom.loadCards(boardId, status.id);
         }
 
-    }
-    loadCards: function (boardId) {
+    },
+
+    loadCards: function (boardId, statusId) {
         // retrieves cards and makes showCards called
-        dataHandler.getCardsByBoardId(boardId, function (cards) {
-            dom.showCards(boardId, cards);
+        dataHandler.getCardsByBoardId(boardId, statusId, function (cards) {
+            dom.showCards(boardId, statusId, cards);
         })
     },
-    showCards: function (boardId, cards) {
+    showCards: function (boardId, statusId, cards) {
         // shows the cards of a board
         // it adds necessary event listeners also
-        let numOfBoardColumns = document.querySelectorAll('.board-column');
-        let cardList = "";
+        let htmlCardsString = '';
+        let boardColumnContents = document.createElement('div');
+        boardColumnContents.setAttribute('class', 'board-column-content');
+        const boardColumns = document.querySelector(`.board-column-${statusId}-${boardId}`);
+        boardColumns.appendChild(boardColumnContents);
 
-        for (let i = 1; i <= numOfBoardColumns.length; i++) {
-            for (let item of cards) {
-                if (item.status_id == `${i}`) {
-                    let card = document.createElement('div');
-                    card.setAttribute('class', 'card');
-                    let cardRemove = document.createElement('div');
-                    cardRemove.setAttribute('class', 'card-remove');
-                    let trash = document.createElement('i');
-                    trash.setAttribute('class', "fas fa-trash-alt");
-                    let cardTitle = document.createElement('div');
-                    cardTitle.setAttribute('class', 'card-title');
-                    cardTitle.innerHTML = `${item.title}`;
-
-                    card.appendChild(cardRemove);
-                    cardRemove.appendChild(trash);
-                    card.appendChild(cardTitle);
-                    cardList += card;
-                    document.querySelector(`.board-column-container-${item.status_id}${item.board_id}`).appendChild(cardList)
-                }
+        for (let card of cards) {
+            if (boardId === card.board_id && statusId === card.status_id) {
+                htmlCardsString = `<div class="card"><div class="card-remove"><i class="fas fa-trash-alt"></i></div>` +
+                    `<div class="card-title">${card.title}</div></div>`;
+                boardColumnContents.insertAdjacentHTML('beforeend', htmlCardsString);
             }
         }
     }
+
+
 };
