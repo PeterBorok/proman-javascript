@@ -10,6 +10,7 @@ export let dom = {
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function (boards) {
             dom.showBoards(boards);
+            dom.toggleButtons();
         });
     },
 
@@ -87,7 +88,16 @@ export let dom = {
                 boardColumnContents.insertAdjacentHTML('beforeend', htmlCardsString);
             }
         }
-    }
+    },
 
-
+    toggleButtons: function () {
+        let boards = document.querySelectorAll('.board-toggle');
+        for (let button of boards) {
+            button.addEventListener('click', function () {
+                    const content = button.parentElement.parentElement.querySelector('.board-columns');
+                    content.classList.toggle('hidden');
+                }
+            )
+        }
+    },
 };

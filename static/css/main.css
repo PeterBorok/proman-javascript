@@ -73,6 +73,10 @@ section.board{
     flex-wrap: nowrap;
 }
 
+.hidden {
+    display: none;
+}
+
 .board-column{
     padding: 10px;
     flex: 1;
