@@ -45,7 +45,7 @@ def change_status(cursor, card_id, status_id):
 
 
 @connection.connection_handler
-def create_new_board(cursor, board_id, board_title):
+def create_new_board(cursor):
     # cursor.execute("""
     #                 INSERT INTO boards
     #                 (id, title)
@@ -59,11 +59,10 @@ def create_new_board(cursor, board_id, board_title):
     seq = seq['max'] + 1
 
     cursor.execute('''
-                        INSERT INTO boards (board_title) VALUES ('Board' + %(seq)s)
+                        INSERT INTO boards (title) VALUES (%(seq)s)
                         ''',
                    {'seq': seq})
 
-    return seq
 
 
 @connection.connection_handler

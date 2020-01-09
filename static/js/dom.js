@@ -5,7 +5,7 @@ export let dom = {
     init: function () {
         // This function should run once, when the page is loaded.
         dom.loadedPage();
-        dom.createBoard();
+        dom.loadBoards();
     },
 
     loadBoards: function () {
@@ -13,6 +13,7 @@ export let dom = {
         dataHandler.getBoards(function (boards) {
             dom.showBoards(boards);
             dom.toggleButtons();
+            dom.createBoard();
             dom.createNewCard();
         });
     },
@@ -20,7 +21,6 @@ export let dom = {
     showBoards: function (boards) {
         // shows boards appending them to #boards div
         // it adds necessary event listeners also
-
         let boardList = '';
 
         for (let board of boards) {
@@ -47,12 +47,18 @@ export let dom = {
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
     },
 
+    clearBoard: function () {
+        document.querySelector(".board-tables").innerHTML = "";
+    },
+
     createBoard: function () {
         let addNewBoard = document.querySelector("#create-board");
         addNewBoard.addEventListener("click", function (e) {
+
             if (e.detail === 1) {
                 dataHandler.createNewBoard(function (data) {
-                    dom.loadBoards()
+                    dom.clearBoard();
+                    dom.loadBoards();
                 })
             }
         })
@@ -132,8 +138,8 @@ export let dom = {
         for (let addNewCardButton of addNewCardButtons) {
             addNewCardButton.addEventListener('click', function () {
                 const boardId = addNewCardButton.nextElementSibling.dataset.number;
-                dataHandler.createNewCard(boardId, () => {
-                    this.loadBoards();
+                dataHandler.createNewCard(boardId, (data) => {
+
                 });
             })
         }

@@ -38,8 +38,15 @@ def get_cards_for_board(board_id: int, status_id: int):
 @app.route("/get-statuses")
 @json_response
 def get_statuses():
-
     return data_handler.get_statuses()
+
+
+@app.route("/create-new-board")
+@json_response
+def create_new_board():
+    data_handler.create_new_board()
+
+    return data_handler.get_boards()
 
 
 def main():
