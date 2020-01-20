@@ -6,6 +6,7 @@ export let dom = {
         // This function should run once, when the page is loaded.
         dom.loadedPage();
         dom.loadBoards();
+        dom.createBoard();
     },
 
     loadBoards: function () {
@@ -13,7 +14,7 @@ export let dom = {
         dataHandler.getBoards(function (boards) {
             dom.showBoards(boards);
             dom.toggleButtons();
-            dom.createBoard();
+
             dom.createNewCard();
         });
     },
@@ -117,6 +118,7 @@ export let dom = {
 
     toggleButtons: function () {
         let boards = document.querySelectorAll('.board-toggle');
+
         for (let button of boards) {
             button.addEventListener('click', function () {
                     const content = button.parentElement.parentElement.querySelector('.board-columns');
