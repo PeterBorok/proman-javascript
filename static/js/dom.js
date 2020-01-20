@@ -14,7 +14,6 @@ export let dom = {
         dataHandler.getBoards(function (boards) {
             dom.showBoards(boards);
             dom.toggleButtons();
-
             dom.createNewCard();
         });
     },
