@@ -48,11 +48,11 @@ def create_new_board():
     return data_handler.get_boards()
 
 
-@app.route("/create-new-card")
+@app.route("/create-new-card/<int:board_id>/<int:status_id>")
 @json_response
-def create_new_card():
+def create_new_card(board_id: int, status_id: int):
     data_handler.create_new_card()
-    return data_handler.get_cards()
+    return data_handler.get_cards(board_id, status_id)
 
 
 def main():
