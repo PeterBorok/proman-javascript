@@ -47,6 +47,13 @@ def create_new_board():
     data_handler.create_new_board()
     return data_handler.get_boards()
 
+@app.route("/delete-board/<int:board_id>")
+@json_response
+def delete_board(board_id: int):
+    data_handler.delete_board(board_id)
+
+    return data_handler.get_boards()
+
 
 @app.route("/create-new-card/<int:board_id>/<int:status_id>")
 @json_response

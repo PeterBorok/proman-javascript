@@ -74,3 +74,12 @@ def get_statuses(cursor):
         """)
     statuses = cursor.fetchall()
     return statuses
+
+
+@connection.connection_handler
+def delete_board(cursor, board_id):
+    cursor.execute('''
+                        DELETE FROM  boards
+                        WHERE id = %(board_id)s;
+                        ''',
+                   {'board_id': board_id})

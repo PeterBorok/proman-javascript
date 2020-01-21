@@ -7,7 +7,6 @@ export let dom = {
         dom.loadedPage();
         dom.loadBoards();
         dom.createBoard();
-
     },
 
     loadBoards: function () {
@@ -15,7 +14,8 @@ export let dom = {
         dataHandler.getBoards(function (boards) {
             dom.showBoards(boards);
             dom.toggleButtons();
-
+            dom.deleteBoard();
+            dom.createNewCard();
         });
     },
 
@@ -28,8 +28,9 @@ export let dom = {
 
             boardList += `
             <section class="board-${board.id} board">
-                <div class="board-header"><span class="board-title">${board.title}</span>
+                <div class="board-header"><span class="board-title" contenteditable="true">${board.title}</span>
                     <button class="board-add" data-number="${board.id}">Add Card</button>
+                    <button class="deleteBoard">Delete board <i class="fas fa-trash-alt"></i></button>
                     <button class="board-toggle" data-number="${board.id}"><i class="fas fa-chevron-down"></i></button>
                 </div>
             </section>`;
@@ -51,11 +52,15 @@ export let dom = {
         document.querySelector(".board-tables").innerHTML = "";
     },
 
+    clearBoardById: function() {
+        this.closest('.board').innerHTML = "";
+    },
+
     createBoard: function () {
         let addNewBoard = document.querySelector("#create-board");
         addNewBoard.addEventListener("click", function (e) {
             if (e.detail === 1) {
-                dataHandler.createNewBoard(function (data) {
+                dataHandler.createNewBoard(function () {
                     dom.clearBoard();
                     dom.loadBoards();
                 })
@@ -93,7 +98,6 @@ export let dom = {
         // retrieves cards and makes showCards called
         dataHandler.getCardsByBoardId(boardId, statusId, function (cards) {
             dom.showCards(boardId, statusId, cards);
-            dom.createNewCard();
         })
     },
     showCards: function (boardId, statusId, cards) {
@@ -150,5 +154,20 @@ export let dom = {
                 }
             })
         }
+    },
+    deleteBoard: function () {
+        let deleteBoards = document.querySelectorAll('.deleteBoard');
+        for (let deleteBoard of deleteBoards) {
+            deleteBoard.addEventListener('click', function (event) {
+                let boardId = parseInt(this.parentElement.querySelector('.board-toggle').dataset.number);
+                let board = this.closest('.board');
+                board.remove();
+                dataHandler.deleteBoard(boardId, function () {
+                    dom.clearBoardById();
+                    dom.loadBoards();
+                });
+            })
+        }
+
     }
 };
