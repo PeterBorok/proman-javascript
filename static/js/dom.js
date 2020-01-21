@@ -29,12 +29,10 @@ export let dom = {
             boardList += `
             <section class="board-${board.id} board">
                 <div class="board-header"><span class="board-title">${board.title}</span>
-                    <button class="board-add">Add Card</button>
-                    <button class="deleteBoard">Delete board <i class="fas fa-trash-alt"></i></button>
+                    <button class="board-add" data-number="${board.id}">Add Card</button>
                     <button class="board-toggle" data-number="${board.id}"><i class="fas fa-chevron-down"></i></button>
                 </div>
             </section>`;
-
             dom.loadStatuses(board.id);
         }
         const outerHtml = `
@@ -60,9 +58,8 @@ export let dom = {
     createBoard: function () {
         let addNewBoard = document.querySelector("#create-board");
         addNewBoard.addEventListener("click", function (e) {
-
             if (e.detail === 1) {
-                dataHandler.createNewBoard(function (data) {
+                dataHandler.createNewBoard(function () {
                     dom.clearBoard();
                     dom.loadBoards();
                 })
@@ -88,7 +85,6 @@ export let dom = {
             htmlStatusesString = `<div class="board-column board-column-${status.id}-${boardId}">` +
                 `<div class="board-column-${status.id} board-column-title">${status.title}</div>` +
                 `</div>`;
-            console.log(htmlStatusesString);
             let element = document.createElement('div');
             element.insertAdjacentHTML('beforeend', htmlStatusesString);
             boardColumns.insertAdjacentHTML('beforeend', htmlStatusesString);
@@ -123,7 +119,6 @@ export let dom = {
 
     toggleButtons: function () {
         let boards = document.querySelectorAll('.board-toggle');
-
         for (let button of boards) {
             button.addEventListener('click', function () {
                     const content = button.parentElement.parentElement.querySelector('.board-columns');
@@ -140,14 +135,22 @@ export let dom = {
         })
     },
 
+    clearCards: function () {
+        document.querySelector('.board-columns').innerHTML = "";
+    },
+
     createNewCard: function () {
         let addNewCardButtons = document.querySelectorAll('.board-add');
-        for (let addNewCardButton of addNewCardButtons) {
-            addNewCardButton.addEventListener('click', function () {
-                const boardId = addNewCardButton.nextElementSibling.dataset.number;
-                dataHandler.createNewCard(boardId, (data) => {
-
-                });
+        for (let newCardButton of addNewCardButtons) {
+            newCardButton.addEventListener("click", function (e) {
+                if (e.detail === 1) {
+                    let boardId = newCardButton.dataset.number;
+                    let statusId = 0;
+                    dataHandler.createNewCard(boardId, statusId, function () {
+                        dom.clearCards();
+                        dom.loadCards(boardId, statusId);
+                    })
+                }
             })
         }
     },
@@ -166,4 +169,13 @@ export let dom = {
         }
 
     }
+    // for (let addNewCardButton of addNewCardButtons) {
+    //     addNewCardButton.addEventListener("click", function (e) {
+    //         dataHandler.createNewCard(boardId, statusId, () => {
+    //             dom.clearCards();
+    //             dom.loadCards();
+    // boardId = addNewCardButton.dataset.number;
+    // statusId = 0;
+    // if (e.detail === 1) {
+
 };
