@@ -144,7 +144,7 @@ export let dom = {
                     let statusId = 0;
                     dataHandler.createNewCard(boardId, statusId, function () {
                         dom.clearCards();
-                        dom.loadCards();
+                        dom.loadCards(boardId, statusId);
                     })
                 }
             })
