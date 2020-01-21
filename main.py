@@ -45,8 +45,14 @@ def get_statuses():
 @json_response
 def create_new_board():
     data_handler.create_new_board()
-
     return data_handler.get_boards()
+
+
+@app.route("/create-new-card")
+@json_response
+def create_new_card():
+    data_handler.create_new_card()
+    return data_handler.get_cards()
 
 
 def main():
