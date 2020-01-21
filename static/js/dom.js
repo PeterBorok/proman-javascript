@@ -14,7 +14,7 @@ export let dom = {
         dataHandler.getBoards(function (boards) {
             dom.showBoards(boards);
             dom.toggleButtons();
-
+            dom.deleteBoard();
             dom.createNewCard();
         });
     },
@@ -30,6 +30,7 @@ export let dom = {
             <section class="board-${board.id} board">
                 <div class="board-header"><span class="board-title">${board.title}</span>
                     <button class="board-add">Add Card</button>
+                    <button class="deleteBoard">Delete board <i class="fas fa-trash-alt"></i></button>
                     <button class="board-toggle" data-number="${board.id}"><i class="fas fa-chevron-down"></i></button>
                 </div>
             </section>`;
@@ -145,5 +146,15 @@ export let dom = {
                 });
             })
         }
+    },
+    deleteBoard: function () {
+        let deleteBoards = document.querySelectorAll('.deleteBoard');
+        for (let deleteBoard of deleteBoards) {
+            deleteBoard.addEventListener('click', function (event) {
+                let board = event.currentTarget.closest('.board');
+                board.remove();
+            })
+        }
+
     }
 };
