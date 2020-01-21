@@ -135,3 +135,7 @@ section.board{
 .card-title{
     padding-right: 16px;
 }
+
+[contenteditable] {
+  outline: 0px solid transparent;
+}

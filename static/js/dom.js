@@ -28,7 +28,7 @@ export let dom = {
 
             boardList += `
             <section class="board-${board.id} board">
-                <div class="board-header"><span class="board-title">${board.title}</span>
+                <div class="board-header"><span class="board-title" contenteditable="true">${board.title}</span>
                     <button class="board-add" data-number="${board.id}">Add Card</button>
                     <button class="deleteBoard">Delete board <i class="fas fa-trash-alt"></i></button>
                     <button class="board-toggle" data-number="${board.id}"><i class="fas fa-chevron-down"></i></button>
