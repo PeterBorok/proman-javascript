@@ -83,7 +83,6 @@ export let dom = {
             htmlStatusesString = `<div class="board-column board-column-${status.id}-${boardId}">` +
                 `<div class="board-column-${status.id} board-column-title">${status.title}</div>` +
                 `</div>`;
-            console.log(htmlStatusesString);
             let element = document.createElement('div');
             element.insertAdjacentHTML('beforeend', htmlStatusesString);
             boardColumns.insertAdjacentHTML('beforeend', htmlStatusesString);
@@ -106,6 +105,8 @@ export let dom = {
         boardColumnContents.setAttribute('class', 'board-column-content');
         const boardColumns = document.querySelector(`.board-column-${statusId}-${boardId}`);
         boardColumns.appendChild(boardColumnContents);
+        dom.changeCardStatus();
+
 
         for (let card of cards) {
             if (boardId === card.board_id && statusId === card.status_id) {
@@ -145,5 +146,23 @@ export let dom = {
                 });
             })
         }
+    },
+
+     changeCardStatus: function() {
+        const cards = document.querySelectorAll('.card');
+        console.log(cards)
+        const columns = document.querySelectorAll('.board-column');
+        for (let card of cards) {
+            card.setAttribute('draggable', 'true');
+            card.setAttribute('ondragstart', 'dragStartHandler(event)')
+        }
+        for (let column of columns) {
+            column.setAttribute('ondrop', 'dropHandler(event)');
+            column.setAttribute('ondragover', 'dragOver(event)');
+        }
+     },
+
+    ondragstart: function dragStartHandler(event) {
+
     }
 };
