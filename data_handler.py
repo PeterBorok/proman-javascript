@@ -53,7 +53,7 @@ def create_new_board(cursor):
     seq = seq['max'] + 1
 
     cursor.execute('''
-                        INSERT INTO boards (title) VALUES ('Board' + %(seq)s)
+                        INSERT INTO boards (title) VALUES (%(seq)s)
                         ''',
                    {'seq': seq})
 

@@ -15,7 +15,7 @@ export let dom = {
         dataHandler.getBoards(function (boards) {
             dom.showBoards(boards);
             dom.toggleButtons();
-            dom.createNewCard();
+
         });
     },
 
@@ -55,7 +55,7 @@ export let dom = {
         let addNewBoard = document.querySelector("#create-board");
         addNewBoard.addEventListener("click", function (e) {
             if (e.detail === 1) {
-                dataHandler.createNewBoard(function () {
+                dataHandler.createNewBoard(function (data) {
                     dom.clearBoard();
                     dom.loadBoards();
                 })
@@ -93,6 +93,7 @@ export let dom = {
         // retrieves cards and makes showCards called
         dataHandler.getCardsByBoardId(boardId, statusId, function (cards) {
             dom.showCards(boardId, statusId, cards);
+            dom.createNewCard();
         })
     },
     showCards: function (boardId, statusId, cards) {
@@ -150,13 +151,4 @@ export let dom = {
             })
         }
     }
-    // for (let addNewCardButton of addNewCardButtons) {
-    //     addNewCardButton.addEventListener("click", function (e) {
-    //         dataHandler.createNewCard(boardId, statusId, () => {
-    //             dom.clearCards();
-    //             dom.loadCards();
-    // boardId = addNewCardButton.dataset.number;
-    // statusId = 0;
-    // if (e.detail === 1) {
-
 };
