@@ -48,6 +48,13 @@ def create_new_board():
 
     return data_handler.get_boards()
 
+@app.route("/delete-board/<int:board_id>")
+@json_response
+def delete_board(board_id: int):
+    data_handler.delete_board(board_id)
+
+    return data_handler.get_boards()
+
 
 def main():
     app.run(debug=True)

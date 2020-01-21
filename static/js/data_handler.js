@@ -82,6 +82,13 @@ export let dataHandler = {
         this._api_get(`/create-new-card`, (response) => {
 
         })
+    },
+    deleteBoard: function (boardId, callback) {
+        // deletes board, saves it and calls the callback function with its data
+        this._api_get(`/delete-board/${boardId}`, (response) => {
+            this._data = response;
+            callback(response);
+        });
+        // here comes more features
     }
-    // here comes more features
 };

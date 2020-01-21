@@ -151,8 +151,13 @@ export let dom = {
         let deleteBoards = document.querySelectorAll('.deleteBoard');
         for (let deleteBoard of deleteBoards) {
             deleteBoard.addEventListener('click', function (event) {
+                let boardId = parseInt(event.currentTarget.parentElement.querySelector('.board-toggle').dataset.number);
                 let board = event.currentTarget.closest('.board');
                 board.remove();
+                dataHandler.deleteBoard(boardId, function () {
+                    dom.clearBoard();
+                    dom.loadBoards();
+                });
             })
         }
 
