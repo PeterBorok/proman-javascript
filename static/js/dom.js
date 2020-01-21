@@ -53,6 +53,10 @@ export let dom = {
         document.querySelector(".board-tables").innerHTML = "";
     },
 
+    clearBoardById: function() {
+        this.closest('.board').innerHTML = "";
+    },
+
     createBoard: function () {
         let addNewBoard = document.querySelector("#create-board");
         addNewBoard.addEventListener("click", function (e) {
@@ -151,11 +155,11 @@ export let dom = {
         let deleteBoards = document.querySelectorAll('.deleteBoard');
         for (let deleteBoard of deleteBoards) {
             deleteBoard.addEventListener('click', function (event) {
-                let boardId = parseInt(event.currentTarget.parentElement.querySelector('.board-toggle').dataset.number);
-                let board = event.currentTarget.closest('.board');
+                let boardId = parseInt(this.parentElement.querySelector('.board-toggle').dataset.number);
+                let board = this.closest('.board');
                 board.remove();
                 dataHandler.deleteBoard(boardId, function () {
-                    dom.clearBoard();
+                    dom.clearBoardById();
                     dom.loadBoards();
                 });
             })
