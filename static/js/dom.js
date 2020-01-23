@@ -14,8 +14,9 @@ export let dom = {
         dataHandler.getBoards(function (boards) {
             dom.showBoards(boards);
             dom.toggleButtons();
-
+            dom.deleteBoard();
             dom.createNewCard();
+            dom.renameBoard();
         });
     },
 
@@ -28,12 +29,12 @@ export let dom = {
 
             boardList += `
             <section class="board-${board.id} board">
-                <div class="board-header"><span class="board-title">${board.title}</span>
-                    <button class="board-add">Add Card</button>
+                <div class="board-header"><span class="board-title" contenteditable="true">${board.title}</span>
+                    <button class="board-add" data-number="${board.id}">Add Card</button>
+                    <button class="deleteBoard">Delete board <i class="fas fa-trash-alt"></i></button>
                     <button class="board-toggle" data-number="${board.id}"><i class="fas fa-chevron-down"></i></button>
                 </div>
             </section>`;
-
             dom.loadStatuses(board.id);
         }
         const outerHtml = `
@@ -52,12 +53,15 @@ export let dom = {
         document.querySelector(".board-tables").innerHTML = "";
     },
 
+    clearBoardById: function () {
+        this.closest('.board').innerHTML = "";
+    },
+
     createBoard: function () {
         let addNewBoard = document.querySelector("#create-board");
         addNewBoard.addEventListener("click", function (e) {
-
             if (e.detail === 1) {
-                dataHandler.createNewBoard(function (data) {
+                dataHandler.createNewBoard(function () {
                     dom.clearBoard();
                     dom.loadBoards();
                 })
@@ -82,6 +86,7 @@ export let dom = {
         for (let status of statuses) {
             htmlStatusesString = `<div class="board-column board-column-${status.id}-${boardId}">` +
                 `<div class="board-column-${status.id} board-column-title">${status.title}</div>` +
+                `<div class="board-column-${status.id} board-column-content"></div>` +
                 `</div>`;
             let element = document.createElement('div');
             element.insertAdjacentHTML('beforeend', htmlStatusesString);
@@ -101,25 +106,23 @@ export let dom = {
         // shows the cards of a board
         // it adds necessary event listeners also
         let htmlCardsString = '';
-        let boardColumnContents = document.createElement('div');
-        boardColumnContents.setAttribute('class', 'board-column-content');
-        const boardColumns = document.querySelector(`.board-column-${statusId}-${boardId}`);
-        boardColumns.appendChild(boardColumnContents);
-        dom.changeCardStatus();
 
 
+        let boardColumn = document.querySelector(`.board-column-${statusId}-${boardId}`);
+        let boardColumnContents = boardColumn.querySelector(".board-column-content");
         for (let card of cards) {
-            if (boardId === card.board_id && statusId === card.status_id) {
-                htmlCardsString = `<div class="card"><div class="card-remove"><i class="fas fa-trash-alt"></i></div>` +
+            if (boardId == card.board_id && statusId == card.status_id) {
+                htmlCardsString = `<div class="card" data-number="${card.id}"><div class="card-remove"><i class="fas fa-trash-alt"></i></div>` +
                     `<div class="card-title">${card.title}</div></div>`;
                 boardColumnContents.insertAdjacentHTML('beforeend', htmlCardsString);
             }
         }
+        dom.deleteCard(boardId, statusId);
+        dom.changeCardStatus();
     },
 
     toggleButtons: function () {
         let boards = document.querySelectorAll('.board-toggle');
-
         for (let button of boards) {
             button.addEventListener('click', function () {
                     const content = button.parentElement.parentElement.querySelector('.board-columns');
@@ -136,13 +139,52 @@ export let dom = {
         })
     },
 
+    clearCards: function (boardId, statusId) {
+        let boardColumn = document.querySelector(`.board-column-${statusId}-${boardId}`);
+        boardColumn.querySelector(".board-column-content").innerHTML = "";
+
+    },
+
     createNewCard: function () {
         let addNewCardButtons = document.querySelectorAll('.board-add');
-        for (let addNewCardButton of addNewCardButtons) {
-            addNewCardButton.addEventListener('click', function () {
-                const boardId = addNewCardButton.nextElementSibling.dataset.number;
-                dataHandler.createNewCard(boardId, (data) => {
+        for (let newCardButton of addNewCardButtons) {
+            newCardButton.addEventListener("click", function (e) {
+                if (e.detail === 1) {
+                    let boardId = newCardButton.dataset.number;
+                    let statusId = 0;
+                    dataHandler.createNewCard(boardId, statusId, function () {
+                        dom.clearCards(boardId, statusId);
+                        dom.loadCards(boardId, statusId);
+                    })
+                }
+            })
+        }
+    },
+    deleteBoard: function () {
+        let deleteBoards = document.querySelectorAll('.deleteBoard');
+        for (let deleteBoard of deleteBoards) {
+            deleteBoard.addEventListener('click', function (event) {
+                let boardId = parseInt(this.parentElement.querySelector('.board-toggle').dataset.number);
+                let board = this.closest('.board');
+                board.remove();
+                dataHandler.deleteBoard(boardId, function () {
+                    dom.clearBoardById();
+                    dom.loadBoards();
+                });
+            })
+        }
+    },
 
+    deleteCard: function (boardId, statusId) {
+        let deleteButtons = document.querySelectorAll('.fa-trash-alt');
+        for (let deleteButton of deleteButtons) {
+            deleteButton.addEventListener('click', function (event) {
+                let currentCard = event.currentTarget.closest('.card');
+                let cardId = currentCard.dataset.number;
+                currentCard.remove();
+                dataHandler.deleteCard(cardId, function () {
+                    dom.clearClosestColumn();
+                    dom.loadCards(boardId, statusId);
                 });
             })
         }
@@ -180,5 +222,25 @@ export let dom = {
         event.preventDefault();
         let cardId = event.dataTransfer.getData('card-id');
         event.target.appendChild(document.getElementById(cardId));
+    },
+
+    clearClosestColumn: function () {
+        this.closest('.board-column-content').innerHTML = "";
+
+    },
+
+    renameBoard: function () {
+        let boardTitles = document.querySelectorAll('.board-title');
+        for (let boardTitle of boardTitles) {
+            let boardId = boardTitle.dataset.id;
+            boardTitle.addEventListener('click', function () {
+                boardTitle.focus();
+
+                dataHandler.renameBoard(boardId, function () {
+                    dom.loadBoards();
+                    boardTitle.blur();
+                })
+            })
+        }
     }
 };

@@ -46,12 +46,6 @@ def change_status(cursor, card_id, status_id):
 
 @connection.connection_handler
 def create_new_board(cursor):
-    # cursor.execute("""
-    #                 INSERT INTO boards
-    #                 (id, title)
-    #                 VALUES (%(board_id)s, %(board_title)s)
-    # """,
-    #                {'id': board_id, 'title': board_title})
     cursor.execute('''
                         SELECT MAX(id) from boards
                         ''')
@@ -65,13 +59,12 @@ def create_new_board(cursor):
 
 
 @connection.connection_handler
-def create_new_card(cursor, board_id, card_id, card_title, status_id):
+def create_new_card(cursor, board_id, status_id):
     cursor.execute("""
-                    INSERT INTO cards
-                    (id, board_id, title, status_id)
-                    VALUES (%(card_id)s, %(board_id)s, %(card_title)s, %(status_id)s) 
+                        INSERT INTO cards (board_id, title, status_id, orderd)
+                        VALUES (%(board_id)s, 'New Card', %(status_id)s, 0)
     """,
-                   {'id': card_id, 'board_id': board_id, 'title': card_title, 'status_id': status_id})
+                   {'board_id': board_id, 'status_id': status_id})
 
 
 @connection.connection_handler
@@ -81,3 +74,30 @@ def get_statuses(cursor):
         """)
     statuses = cursor.fetchall()
     return statuses
+
+
+@connection.connection_handler
+def delete_board(cursor, board_id):
+    cursor.execute('''
+                        DELETE FROM  boards
+                        WHERE id = %(board_id)s;
+                        ''',
+                   {'board_id': board_id})
+
+@connection.connection_handler
+def delete_card(cursor, card_id):
+    cursor.execute('''
+                        DELETE FROM cards
+                        WHERE id = %(card_id)s;
+                        ''',
+                   {'card_id': card_id})
+
+
+@connection.connection_handler
+def rename_board(cursor, board_id, board_title):
+    cursor.execute('''
+                    UPDATE boards
+                    SET title = %(board_title)s
+                    WHERE id = %(board_id)s;
+    ''',
+                   {'board_id': board_id, 'board_title': board_title})
