@@ -180,7 +180,7 @@ export let dom = {
             deleteButton.addEventListener('click', function (event) {
                 let currentCard = event.currentTarget.closest('.card');
                 let cardId = currentCard.dataset.number;
-                currentCard.remove()
+                currentCard.remove();
                 dataHandler.deleteCard(cardId, function () {
                     dom.clearClosestColumn();
                     dom.loadCards(boardId, statusId);
