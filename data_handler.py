@@ -83,3 +83,13 @@ def delete_board(cursor, board_id):
                         WHERE id = %(board_id)s;
                         ''',
                    {'board_id': board_id})
+
+
+@connection.connection_handler
+def rename_board(cursor, board_id, board_title):
+    cursor.execute('''
+                    UPDATE boards
+                    SET title = %(board_title)s
+                    WHERE id = %(board_id)s;
+    ''',
+                   {'board_id': board_id, 'board_title': board_title})

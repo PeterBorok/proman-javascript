@@ -87,5 +87,12 @@ export let dataHandler = {
             callback(response);
         });
         // here comes more features
+    },
+
+    renameBoard: function (boardId, callback) {
+        this._api_get(`/rename-board/${boardId}`, (response) => {
+            this._data = response;
+            callback(response);
+        })
     }
 };

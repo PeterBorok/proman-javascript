@@ -16,6 +16,7 @@ export let dom = {
             dom.toggleButtons();
             dom.deleteBoard();
             dom.createNewCard();
+            dom.renameBoard();
         });
     },
 
@@ -28,7 +29,7 @@ export let dom = {
 
             boardList += `
             <section class="board-${board.id} board">
-                <div class="board-header"><span class="board-title" contenteditable="true">${board.title}</span>
+                <div class="board-header"><span class="board-title" data-id= ${board.id} contenteditable="true">${board.title}</span>
                     <button class="board-add" data-number="${board.id}">Add Card</button>
                     <button class="deleteBoard">Delete board <i class="fas fa-trash-alt"></i></button>
                     <button class="board-toggle" data-number="${board.id}"><i class="fas fa-chevron-down"></i></button>
@@ -169,12 +170,19 @@ export let dom = {
                 });
             })
         }
-    }
+    },
+
     renameBoard: function () {
         let boardTitles = document.querySelectorAll('.board-title');
         for (let boardTitle of boardTitles) {
+            let boardId = boardTitle.dataset.id;
             boardTitle.addEventListener('click', function () {
-                boardTitle.
+                boardTitle.focus();
+
+                dataHandler.renameBoard(boardId, function () {
+                    dom.loadBoards();
+                    boardTitle.blur();
+                })
             })
         }
     }
