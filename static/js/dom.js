@@ -7,8 +7,6 @@ export let dom = {
         dom.loadedPage();
         dom.loadBoards();
         dom.createBoard();
-
-
     },
 
     loadBoards: function () {
@@ -171,6 +169,13 @@ export let dom = {
                 });
             })
         }
-
+    }
+    renameBoard: function () {
+        let boardTitles = document.querySelectorAll('.board-title');
+        for (let boardTitle of boardTitles) {
+            boardTitle.addEventListener('click', function () {
+                boardTitle.
+            })
+        }
     }
 };
