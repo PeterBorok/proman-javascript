@@ -149,7 +149,7 @@ export let dom = {
             newCardButton.addEventListener("click", function (e) {
                 if (e.detail === 1) {
                     let boardId = newCardButton.dataset.number;
-                    let statusId = 2;
+                    let statusId = 0;
                     dataHandler.createNewCard(boardId, statusId, function () {
                         dom.clearCards(boardId, statusId);
                         dom.loadCards(boardId, statusId);
