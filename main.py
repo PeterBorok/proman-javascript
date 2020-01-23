@@ -61,6 +61,12 @@ def create_new_card(board_id: int, status_id: int):
     data_handler.create_new_card(board_id, status_id)
     return data_handler.get_cards(board_id, status_id)
 
+@app.route("/rename-board/<int:board_id>")
+@json_response
+def rename_board(board_id):
+    data_handler.rename_board(board_id)
+    return data_handler.get_cards()
+
 
 def main():
     app.run(debug=True)

@@ -83,3 +83,5 @@ def delete_board(cursor, board_id):
                         WHERE id = %(board_id)s;
                         ''',
                    {'board_id': board_id})
+
+

@@ -16,6 +16,7 @@ export let dom = {
             dom.toggleButtons();
             dom.deleteBoard();
             dom.createNewCard();
+            dom.deleteCard();
         });
     },
 
@@ -52,7 +53,7 @@ export let dom = {
         document.querySelector(".board-tables").innerHTML = "";
     },
 
-    clearBoardById: function() {
+    clearBoardById: function () {
         this.closest('.board').innerHTML = "";
     },
 
@@ -158,7 +159,7 @@ export let dom = {
     deleteBoard: function () {
         let deleteBoards = document.querySelectorAll('.deleteBoard');
         for (let deleteBoard of deleteBoards) {
-            deleteBoard.addEventListener('click', function (event) {
+            deleteBoard.addEventListener('click', function () {
                 let boardId = parseInt(this.parentElement.querySelector('.board-toggle').dataset.number);
                 let board = this.closest('.board');
                 board.remove();
@@ -169,14 +170,31 @@ export let dom = {
             })
         }
 
-    }
-    // for (let addNewCardButton of addNewCardButtons) {
-    //     addNewCardButton.addEventListener("click", function (e) {
-    //         dataHandler.createNewCard(boardId, statusId, () => {
-    //             dom.clearCards();
-    //             dom.loadCards();
-    // boardId = addNewCardButton.dataset.number;
-    // statusId = 0;
-    // if (e.detail === 1) {
+    },
 
-};
+    deleteCard: function () {
+        let deleteCards = document.querySelectorAll('.card-remove');
+        for (let deleteCard of deleteCards) {
+            deleteCard.addEventListener('click', function () {
+                let card = this.closest('.card');
+                card.remove();
+            })
+
+        }
+    }
+}
+/*renameBoard: function () {
+    let renameTitles = document.querySelectorAll('.board-title');
+    for (let renameTitle of renameTitles) {
+        renameTitle.addEventListener('click', function (event) {
+        })
+    }
+}*/
+// for (let addNewCardButton of addNewCardButtons) {
+//     addNewCardButton.addEventListener("click", function (e) {
+//         dataHandler.createNewCard(boardId, statusId, () => {
+//             dom.clearCards();
+//             dom.loadCards();
+// boardId = addNewCardButton.dataset.number;
+// statusId = 0;
+// if (e.detail === 1) {
