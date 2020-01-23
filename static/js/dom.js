@@ -173,7 +173,6 @@ export let dom = {
         }
     },
 
-    },
     deleteCard: function (boardId, statusId) {
         let deleteButtons = document.querySelectorAll('.fa-trash-alt');
         for (let deleteButton of deleteButtons) {
@@ -187,10 +186,13 @@ export let dom = {
                 });
             })
         }
-
     },
+
     clearClosestColumn: function () {
         this.closest('.board-column-content').innerHTML = "";
+
+    },
+
     renameBoard: function () {
         let boardTitles = document.querySelectorAll('.board-title');
         for (let boardTitle of boardTitles) {
