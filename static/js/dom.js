@@ -7,6 +7,8 @@ export let dom = {
         dom.loadedPage();
         dom.loadBoards();
         dom.createBoard();
+
+
     },
 
     loadBoards: function () {
@@ -52,7 +54,7 @@ export let dom = {
         document.querySelector(".board-tables").innerHTML = "";
     },
 
-    clearBoardById: function() {
+    clearBoardById: function () {
         this.closest('.board').innerHTML = "";
     },
 
@@ -85,6 +87,7 @@ export let dom = {
         for (let status of statuses) {
             htmlStatusesString = `<div class="board-column board-column-${status.id}-${boardId}">` +
                 `<div class="board-column-${status.id} board-column-title">${status.title}</div>` +
+                `<div class="board-column-${status.id} board-column-content"></div>` +
                 `</div>`;
             let element = document.createElement('div');
             element.insertAdjacentHTML('beforeend', htmlStatusesString);
@@ -104,14 +107,12 @@ export let dom = {
         // shows the cards of a board
         // it adds necessary event listeners also
         let htmlCardsString = '';
-        let boardColumnContents = document.createElement('div');
-        boardColumnContents.setAttribute('class', 'board-column-content');
-        const boardColumns = document.querySelector(`.board-column-${statusId}-${boardId}`);
-        boardColumns.appendChild(boardColumnContents);
 
+        let boardColumn = document.querySelector(`.board-column-${statusId}-${boardId}`);
+        let boardColumnContents = boardColumn.querySelector(".board-column-content");
         for (let card of cards) {
-            if (boardId === card.board_id && statusId === card.status_id) {
-                htmlCardsString = `<div class="card"><div class="card-remove"><i class="fas fa-trash-alt"></i></div>` +
+            if (boardId == card.board_id && statusId == card.status_id) {
+                htmlCardsString = `<div class="card" data-number="${card.id}"><div class="card-remove"><i class="fas fa-trash-alt"></i></div>` +
                     `<div class="card-title">${card.title}</div></div>`;
                 boardColumnContents.insertAdjacentHTML('beforeend', htmlCardsString);
             }
@@ -136,8 +137,10 @@ export let dom = {
         })
     },
 
-    clearCards: function () {
-        document.querySelector('.board-columns').innerHTML = "";
+    clearCards: function (boardId, statusId) {
+        let boardColumn = document.querySelector(`.board-column-${statusId}-${boardId}`);
+        boardColumn.querySelector(".board-column-content").innerHTML = "";
+
     },
 
     createNewCard: function () {
@@ -146,9 +149,9 @@ export let dom = {
             newCardButton.addEventListener("click", function (e) {
                 if (e.detail === 1) {
                     let boardId = newCardButton.dataset.number;
-                    let statusId = 0;
+                    let statusId = 2;
                     dataHandler.createNewCard(boardId, statusId, function () {
-                        dom.clearCards();
+                        dom.clearCards(boardId, statusId);
                         dom.loadCards(boardId, statusId);
                     })
                 }
