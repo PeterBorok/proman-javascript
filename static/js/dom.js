@@ -149,20 +149,36 @@ export let dom = {
     },
 
      changeCardStatus: function() {
-        const cards = document.querySelectorAll('.card');
-        console.log(cards)
-        const columns = document.querySelectorAll('.board-column');
-        for (let card of cards) {
-            card.setAttribute('draggable', 'true');
-            card.setAttribute('ondragstart', 'dragStartHandler(event)')
-        }
-        for (let column of columns) {
-            column.setAttribute('ondrop', 'dropHandler(event)');
-            column.setAttribute('ondragover', 'dragOver(event)');
-        }
+         const cards = document.querySelectorAll('.card');
+         const boardColumns = document.querySelectorAll('.board-column-content');
+         const boardTable = document.querySelector('.board-tables');
+         let cardId = 1;
+         for (let card of cards) {
+             card.setAttribute('draggable', 'true');
+             card.setAttribute('id', cardId);
+             card.addEventListener('dragstart', dom.dragStartHandler);
+             cardId += 1;
+         }
+         boardTable.addEventListener('dragover', dom.dragOverHandler);
+         for (let boardColumn of boardColumns) {
+             boardColumn.addEventListener('drop', dom.dropHandler);
+         }
      },
 
-    ondragstart: function dragStartHandler(event) {
 
+    dragOverHandler: function (event) {
+        event.preventDefault();
+    },
+
+
+    dragStartHandler: function (event) {
+        event.dataTransfer.setData('card-id', event.target.id);
+    },
+
+
+    dropHandler: function (event) {
+        event.preventDefault();
+        let cardId = event.dataTransfer.getData('card-id');
+        event.target.appendChild(document.getElementById(cardId));
     }
 };
