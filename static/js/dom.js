@@ -117,6 +117,7 @@ export let dom = {
                 boardColumnContents.insertAdjacentHTML('beforeend', htmlCardsString);
             }
         }
+        dom.deleteCard(boardId, statusId);
     },
 
     toggleButtons: function () {
@@ -172,5 +173,23 @@ export let dom = {
             })
         }
 
+    },
+    deleteCard: function (boardId, statusId) {
+        let deleteButtons = document.querySelectorAll('.fa-trash-alt');
+        for (let deleteButton of deleteButtons) {
+            deleteButton.addEventListener('click', function (event) {
+                let currentCard = event.currentTarget.closest('.card');
+                let cardId = currentCard.dataset.number;
+                currentCard.remove()
+                dataHandler.deleteCard(cardId, function () {
+                    dom.clearClosestColumn();
+                    dom.loadCards(boardId, statusId);
+                });
+            })
+        }
+
+    },
+    clearClosestColumn: function () {
+        this.closest('.board-column-content').innerHTML = "";
     }
 };
