@@ -50,6 +50,13 @@ def create_new_board():
 @app.route("/delete-board/<int:board_id>")
 @json_response
 def delete_board(board_id: int):
+    card_ids = []
+    cards = data_handler.get_cards_by_board_id(board_id)
+    for card in cards:
+        card_ids.append(card['id'])
+    for card_id in card_ids:
+        data_handler.delete_card(card_id)
+
     data_handler.delete_board(board_id)
 
     return data_handler.get_boards()
@@ -65,7 +72,6 @@ def create_new_card(board_id: int, status_id: int):
 @json_response
 def delete_card(card_id: int):
     data_handler.delete_card(card_id)
-
     return data_handler.get_cards()
 
 
