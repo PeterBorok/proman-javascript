@@ -84,6 +84,7 @@ def delete_board(cursor, board_id):
                         ''',
                    {'board_id': board_id})
 
+
 @connection.connection_handler
 def delete_card(cursor, card_id):
     cursor.execute('''
@@ -101,3 +102,14 @@ def rename_board(cursor, board_id, board_title):
                     WHERE id = %(board_id)s;
     ''',
                    {'board_id': board_id, 'board_title': board_title})
+
+
+@connection.connection_handler
+def get_cards_by_board_id(cursor, board_id):
+    cursor.execute("""
+                    SELECT * FROM cards
+                    WHERE board_id=%(board_id)s;
+    """,
+                   {"board_id": board_id})
+    cards = cursor.fetchall()
+    return cards
